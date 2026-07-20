@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
 
-        Role userRole = roleRepository.findByCode("USER")
+        Role userRole = roleRepository.findByCode("ROLE_USER")
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Default role USER not found")
                 );
