@@ -7,7 +7,7 @@ import java.util.Set;
 @Builder
 public record AuthResponse(
 
-        String id,
+        Long id,
         String email,
         Set<String> roles
 
