@@ -3,27 +3,45 @@ name: CI
 on:
   push:
     branches:
-      - develop
       - main
+      - develop
       - feature/**
   pull_request:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
-    steps:
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: auth_system
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-      - name: Checkout
+    env:
+      DB_URL: jdbc:postgresql://localhost:5432/auth_system
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+
+    steps:
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
           cache: maven
 
-      - name: Build
+      - name: Build and test
         run: ./mvnw clean verify
