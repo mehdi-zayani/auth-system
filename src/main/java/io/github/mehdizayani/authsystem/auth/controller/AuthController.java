@@ -1,7 +1,9 @@
 package io.github.mehdizayani.authsystem.auth.controller;
 
+import io.github.mehdizayani.authsystem.auth.dto.request.LoginRequest;
 import io.github.mehdizayani.authsystem.auth.dto.request.RegisterRequest;
 import io.github.mehdizayani.authsystem.auth.dto.response.AuthResponse;
+import io.github.mehdizayani.authsystem.auth.dto.response.LoginResponse;
 import io.github.mehdizayani.authsystem.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +28,15 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+
+        return ResponseEntity.ok(
+                authService.login(request)
+        );
     }
 }

@@ -35,3 +35,7 @@ management:
 logging:
   level:
     org.springframework.security: INFO
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  expiration: ${JWT_EXPIRATION:3600000}
