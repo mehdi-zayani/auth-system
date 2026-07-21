@@ -44,14 +44,19 @@ public class User extends BaseEntity {
             )
     )
     private Set<Role> roles = new HashSet<>();
+    @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;
+    @Builder.Default
     @Column(nullable = false)
     private boolean accountLocked = false ;
+    @Builder.Default
     @Column(nullable = false)
     private boolean credentialsExpired = false;
+    @Builder.Default
     @Column(nullable = false)
     private boolean accountExpired = false;
+    @Builder.Default
     @Column(nullable = false)
     private boolean emailVerified = false;
 
