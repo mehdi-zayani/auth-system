@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-
+import io.jsonwebtoken.JwtException;
 
 import java.util.function.Function;
 import javax.crypto.SecretKey;
@@ -73,12 +73,16 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
 
-        Jws<Claims> claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token);
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
 
-        return claims.getPayload();
+        } catch (JwtException e) {
+            throw new IllegalArgumentException("Invalid JWT token", e);
+        }
     }
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(
