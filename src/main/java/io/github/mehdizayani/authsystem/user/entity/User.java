@@ -31,6 +31,7 @@ public class User extends BaseEntity {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",

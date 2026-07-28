@@ -9,12 +9,15 @@ import io.github.mehdizayani.authsystem.exception.ConflictException;
 import io.github.mehdizayani.authsystem.exception.ResourceNotFoundException;
 import io.github.mehdizayani.authsystem.role.entity.Role;
 import io.github.mehdizayani.authsystem.role.repository.RoleRepository;
+import io.github.mehdizayani.authsystem.security.CustomUserDetails;
+import io.github.mehdizayani.authsystem.security.CustomUserDetailsService;
 import io.github.mehdizayani.authsystem.security.jwt.JwtService;
 import io.github.mehdizayani.authsystem.user.entity.User;
 import io.github.mehdizayani.authsystem.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -77,14 +81,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
                         request.password()
                 )
         );
 
-        String token = jwtService.generateToken(request.email());
+        CustomUserDetails userDetails =
+                (CustomUserDetails) authentication.getPrincipal();
+
+        String token = jwtService.generateToken(userDetails);
 
         return LoginResponse.builder()
                 .accessToken(token)
