@@ -1,3 +1,9 @@
+# -----------------------------------------------------
+# Docker Compose configuration
+# Description:
+# Starts the PostgreSQL database required by the application.
+# -----------------------------------------------------
+
 services:
 
   postgres:

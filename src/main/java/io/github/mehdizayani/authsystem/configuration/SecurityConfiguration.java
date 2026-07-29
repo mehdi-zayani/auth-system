@@ -1,24 +1,38 @@
 package io.github.mehdizayani.authsystem.configuration;
 
+import io.github.mehdizayani.authsystem.security.jwt.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import io.github.mehdizayani.authsystem.security.jwt.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
+/**
+ * Configures Spring Security for the application.
+ * <p>
+ * Uses stateless JWT authentication and enables method-level security.
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfiguration {
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    /**
+     * Configures the application's security filter chain.
+     *
+     * @param http the HTTP security configuration
+     * @return configured security filter chain
+     * @throws Exception if the security configuration fails
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -57,6 +71,14 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
+    /**
+     * Exposes the application's authentication manager.
+     *
+     * @param configuration Spring Security authentication configuration
+     * @return authentication manager
+     * @throws Exception if the authentication manager cannot be created
+     */
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration

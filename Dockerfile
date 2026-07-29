@@ -1,3 +1,10 @@
+# -----------------------------------------------------
+# Docker image
+# Description:
+# Builds a lightweight Docker image for running the
+# Auth System Spring Boot application.
+# -----------------------------------------------------
+
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
