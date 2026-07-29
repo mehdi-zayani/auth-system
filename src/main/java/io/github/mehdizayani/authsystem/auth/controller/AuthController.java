@@ -11,15 +11,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Exposes REST endpoints for user registration and authentication.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-
     private final AuthService authService;
 
-
+    /**
+     * Registers a new user account.
+     *
+     * @param request registration request
+     * @return registered user information
+     */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request
@@ -30,6 +37,12 @@ public class AuthController {
                 .body(authService.register(request));
     }
 
+    /**
+     * Authenticates a user and returns a JWT access token.
+     *
+     * @param request login request
+     * @return authentication response containing the JWT
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request

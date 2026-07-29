@@ -13,11 +13,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Handles Spring Security exceptions and converts them into
+ * standardized API error responses.
+ * <p>
+ * This handler is responsible for authentication and authorization
+ * failures raised by Spring Security.
+ */
 @Slf4j
 @RestControllerAdvice
 public class SecurityExceptionHandler {
 
-
+    /**
+     * Handles authentication failures.
+     *
+     * @param exception the authentication exception
+     * @param request the current HTTP request
+     * @return a standardized 401 Unauthorized response
+     */
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiErrorResponse> handleAuthentication(
             AuthenticationException exception,
@@ -34,7 +47,14 @@ public class SecurityExceptionHandler {
         );
     }
 
-
+    /**
+     * Handles authorization failures when an authenticated user
+     * attempts to access a protected resource without sufficient privileges.
+     *
+     * @param exception the access denied exception
+     * @param request the current HTTP request
+     * @return a standardized 403 Forbidden response
+     */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiErrorResponse> handleAccessDenied(
             AccessDeniedException exception,
@@ -51,7 +71,15 @@ public class SecurityExceptionHandler {
         );
     }
 
-
+    /**
+     * Builds a standardized API error response.
+     *
+     * @param status the HTTP status
+     * @param code the application-specific error code
+     * @param message the error message
+     * @param request the current HTTP request
+     * @return the response entity containing the error payload
+     */
     private ResponseEntity<ApiErrorResponse> buildResponse(
             HttpStatus status,
             String code,

@@ -10,24 +10,58 @@
 	</parent>
 	<groupId>io.github.mehdizayani</groupId>
 	<artifactId>auth-system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+	<version>1.0.0</version>
+
+	<name>Auth System</name>
+
+	<description>
+		Production-ready authentication and authorization system built with Spring Boot,
+		Spring Security, JWT, PostgreSQL and Flyway.
+	</description>
+
+	<url>https://github.com/mehdi-zayani/auth-system</url>
+
 	<licenses>
-		<license/>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
+
 	<developers>
-		<developer/>
+		<developer>
+			<id>mehdizayani</id>
+			<name>Mehdi-Salim Zayani</name>
+			<email>Ymehdi.zayani.dev@gmail.com</email>
+			<url>https://github.com/mehdi-zayani</url>
+
+			<roles>
+				<role>Creator</role>
+				<role>Maintainer</role>
+			</roles>
+		</developer>
 	</developers>
+
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection>
+			scm:git:https://github.com/mehdi-zayani/auth-system.git
+		</connection>
+
+		<developerConnection>
+			scm:git:ssh://git@github.com:mehdi-zayani/auth-system.git
+		</developerConnection>
+
+		<url>
+			https://github.com/mehdi-zayani/auth-system
+		</url>
+
+		<tag>v1.0.0</tag>
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<jjwt.version>0.12.6</jjwt.version>
+		<springdoc.version>3.0.2</springdoc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -61,7 +95,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>3.0.2</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 
 		<dependency>
@@ -83,20 +117,20 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.12.6</version>
+			<version>${jjwt.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.12.6</version>
+			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
-			<version>0.12.6</version>
+			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

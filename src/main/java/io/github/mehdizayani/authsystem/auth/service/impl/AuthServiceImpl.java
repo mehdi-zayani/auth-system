@@ -10,7 +10,6 @@ import io.github.mehdizayani.authsystem.exception.ResourceNotFoundException;
 import io.github.mehdizayani.authsystem.role.entity.Role;
 import io.github.mehdizayani.authsystem.role.repository.RoleRepository;
 import io.github.mehdizayani.authsystem.security.CustomUserDetails;
-import io.github.mehdizayani.authsystem.security.CustomUserDetailsService;
 import io.github.mehdizayani.authsystem.security.jwt.JwtService;
 import io.github.mehdizayani.authsystem.user.entity.User;
 import io.github.mehdizayani.authsystem.user.repository.UserRepository;
@@ -24,6 +23,12 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation of {@link AuthService}.
+ * <p>
+ * Handles user registration and authentication using Spring Security
+ * and JWT-based authentication.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -34,8 +39,14 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final CustomUserDetailsService customUserDetailsService;
 
+
+    /**
+     * Registers a new user with the default {@code ROLE_USER}.
+     *
+     * @param request registration request
+     * @return registered user information
+     */
     @Override
     public AuthResponse register(RegisterRequest request) {
 
@@ -78,6 +89,13 @@ public class AuthServiceImpl implements AuthService {
                 )
                 .build();
     }
+
+    /**
+     * Authenticates a user and generates a JWT access token.
+     *
+     * @param request login request
+     * @return authentication response containing the generated JWT
+     */
     @Override
     public LoginResponse login(LoginRequest request) {
 
@@ -96,7 +114,7 @@ public class AuthServiceImpl implements AuthService {
         return LoginResponse.builder()
                 .accessToken(token)
                 .tokenType("Bearer")
-                .expiresIn(3600)
+                .expiresIn(jwtService.getExpirationInSeconds())
                 .build();
     }
 }
