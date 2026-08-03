@@ -7,7 +7,6 @@ import io.github.mehdizayani.authsystem.auth.dto.response.AuthResponse;
 import io.github.mehdizayani.authsystem.auth.dto.response.LoginResponse;
 import io.github.mehdizayani.authsystem.auth.service.AuthService;
 import io.github.mehdizayani.authsystem.security.CustomUserDetailsService;
-import io.github.mehdizayani.authsystem.security.jwt.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Set;
 
 
+/**
+ * Integration tests for {@link AuthController}.
+ * <p>
+ * Verifies the authentication REST API using {@link MockMvc}
+ * with mocked service layer dependencies.
+ *
+ * @author Mehdi Zayani
+ * @since 1.0.0
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 class AuthControllerTest {
@@ -43,7 +51,10 @@ class AuthControllerTest {
     @MockitoBean
     private CustomUserDetailsService customUserDetailsService;
 
-
+    /**
+     * Verifies that a valid registration request returns
+     * HTTP 201 (Created) and the expected user information.
+     */
     @Test
     void shouldRegisterUserSuccessfully() throws Exception {
 
@@ -80,7 +91,10 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"));
     }
 
-
+    /**
+     * Verifies that an invalid registration request
+     * returns HTTP 400 (Bad Request).
+     */
     @Test
     void shouldLoginSuccessfully() throws Exception {
 

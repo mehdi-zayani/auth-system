@@ -9,7 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+/**
+ * Unit tests for {@link JwtService}.
+ * <p>
+ * Verifies JWT generation, username extraction
+ * and token validation.
+ */
 class JwtServiceTest {
 
 
@@ -17,7 +22,10 @@ class JwtServiceTest {
 
     private CustomUserDetails userDetails;
 
-
+    /**
+     * Initializes the JWT service and test user
+     * before each test.
+     */
     @BeforeEach
     void setUp() {
 
@@ -43,7 +51,10 @@ class JwtServiceTest {
     }
 
 
-
+    /**
+     * Verifies that a JWT is successfully generated
+     * and contains the expected username.
+     */
     @Test
     void shouldGenerateTokenSuccessfully() {
 
@@ -62,7 +73,10 @@ class JwtServiceTest {
     }
 
 
-
+    /**
+     * Verifies that a generated JWT is considered valid
+     * for the corresponding user.
+     */
     @Test
     void shouldValidateTokenSuccessfully() {
 
@@ -83,7 +97,10 @@ class JwtServiceTest {
     }
 
 
-
+    /**
+     * Verifies that token validation fails when the
+     * token does not belong to the provided user.
+     */
     @Test
     void shouldReturnFalseWhenUsernameDoesNotMatch() {
 

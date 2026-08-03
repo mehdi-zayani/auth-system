@@ -26,6 +26,12 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link AuthServiceImpl}.
+ * <p>
+ * Verifies the authentication service business logic
+ * using mocked dependencies.
+ */
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
 
@@ -55,7 +61,9 @@ class AuthServiceImplTest {
 
     private Role userRole;
 
-
+    /**
+     * Initializes common test fixtures before each test.
+     */
     @BeforeEach
     void setUp() {
 
@@ -64,7 +72,10 @@ class AuthServiceImplTest {
         userRole.setCode("ROLE_USER");
     }
 
-
+    /**
+     * Verifies that a new user is successfully registered
+     * when the provided email and username are available.
+     */
     @Test
     void shouldRegisterUserSuccessfully() {
 
@@ -125,7 +136,10 @@ class AuthServiceImplTest {
     }
 
 
-
+    /**
+     * Verifies that a {@link ConflictException} is thrown
+     * when attempting to register with an email that already exists.
+     */
     @Test
     void shouldThrowExceptionWhenEmailAlreadyExists() {
 
