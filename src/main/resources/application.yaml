@@ -26,6 +26,8 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+  error:
+    include-stacktrace: never
 
 management:
   endpoints:
@@ -38,8 +40,12 @@ management:
 
 logging:
   level:
-    org.springframework.security: INFO
-
+    root: WARN
+    org.springframework: WARN
+    io.github.mehdizayani: INFO
+    org.hibernate: WARN
+    org.hibernate.SQL: WARN
+    com.zaxxer.hikari: WARN
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   expiration: ${JWT_EXPIRATION:3600000}
