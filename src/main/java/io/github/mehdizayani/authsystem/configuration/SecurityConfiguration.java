@@ -55,7 +55,10 @@ public class SecurityConfiguration {
                         ).permitAll()
 
                         // Actuator
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/actuator/info"
+                        ).permitAll()
 
                         // Public endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
