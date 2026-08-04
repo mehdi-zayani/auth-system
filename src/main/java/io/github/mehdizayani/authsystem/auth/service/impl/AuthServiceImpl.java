@@ -9,18 +9,26 @@ import io.github.mehdizayani.authsystem.exception.ConflictException;
 import io.github.mehdizayani.authsystem.exception.ResourceNotFoundException;
 import io.github.mehdizayani.authsystem.role.entity.Role;
 import io.github.mehdizayani.authsystem.role.repository.RoleRepository;
+import io.github.mehdizayani.authsystem.security.CustomUserDetails;
 import io.github.mehdizayani.authsystem.security.jwt.JwtService;
 import io.github.mehdizayani.authsystem.user.entity.User;
 import io.github.mehdizayani.authsystem.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation of {@link AuthService}.
+ * <p>
+ * Handles user registration and authentication using Spring Security
+ * and JWT-based authentication.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -32,6 +40,13 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
+
+    /**
+     * Registers a new user with the default {@code ROLE_USER}.
+     *
+     * @param request registration request
+     * @return registered user information
+     */
     @Override
     public AuthResponse register(RegisterRequest request) {
 
@@ -74,22 +89,32 @@ public class AuthServiceImpl implements AuthService {
                 )
                 .build();
     }
+
+    /**
+     * Authenticates a user and generates a JWT access token.
+     *
+     * @param request login request
+     * @return authentication response containing the generated JWT
+     */
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
                         request.password()
                 )
         );
 
-        String token = jwtService.generateToken(request.email());
+        CustomUserDetails userDetails =
+                (CustomUserDetails) authentication.getPrincipal();
+
+        String token = jwtService.generateToken(userDetails);
 
         return LoginResponse.builder()
                 .accessToken(token)
                 .tokenType("Bearer")
-                .expiresIn(3600)
+                .expiresIn(jwtService.getExpirationInSeconds())
                 .build();
     }
 }

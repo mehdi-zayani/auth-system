@@ -14,10 +14,25 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Handles request validation exceptions and converts them into
+ * standardized validation error responses.
+ * <p>
+ * Validation errors include all invalid request fields and their
+ * corresponding validation messages.
+ */
 @Slf4j
 @RestControllerAdvice
 public class ValidationExceptionHandler {
 
+
+    /**
+     * Handles request validation failures.
+     *
+     * @param exception the validation exception
+     * @param request the current HTTP request
+     * @return a standardized validation error response
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidation(
             MethodArgumentNotValidException exception,

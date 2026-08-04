@@ -13,18 +13,55 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Global exception handler for REST controllers.
+ * <p>
+ * Converts application and framework exceptions into standardized
+ * JSON error responses returned to API clients.
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * Handles authorization failures triggered by Spring Security.
+     *
+     * @param ex the authorization exception
+     * @param request the current HTTP request
+     * @return a standardized 403 Forbidden response
+     */
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthorizationDenied(
+            AuthorizationDeniedException ex,
+            HttpServletRequest request
+    ) {
 
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message("Access denied")
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(error);
+    }
+    /**
+     * Handles resource not found exceptions.
+     *
+     * @param exception the thrown exception
+     * @param request the current HTTP request
+     * @return a standardized 404 Not Found response
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleNotFound(
             ResourceNotFoundException exception,
@@ -41,7 +78,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-
+    /**
+     * Handles resource conflict exceptions.
+     *
+     * @param exception the thrown exception
+     * @param request the current HTTP request
+     * @return a standardized 409 Conflict response
+     */
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiErrorResponse> handleConflict(
             ConflictException exception,
@@ -58,7 +101,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-
+    /**
+     * Handles bad request exceptions.
+     *
+     * @param exception the thrown exception
+     * @param request the current HTTP request
+     * @return a standardized 400 Bad Request response
+     */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiErrorResponse> handleBadRequest(
             BadRequestException exception,
@@ -75,7 +124,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-
+    /**
+     * Handles authentication failures.
+     *
+     * @param exception the thrown exception
+     * @param request the current HTTP request
+     * @return a standardized 401 Unauthorized response
+     */
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiErrorResponse> handleUnauthorized(
             UnauthorizedException exception,
@@ -92,24 +147,34 @@ public class GlobalExceptionHandler {
         );
     }
 
+    /**
+     * Handles forbidden access exceptions.
+     *
+     * @param exception the thrown exception
+    */
+     @ExceptionHandler(ForbiddenException.class)
+        public ResponseEntity<ApiErrorResponse> handleForbidden(
+                ForbiddenException exception,
+                HttpServletRequest request
+        ) {
 
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ApiErrorResponse> handleForbidden(
-            ForbiddenException exception,
-            HttpServletRequest request
-    ) {
+            log.warn("Forbidden: {}", exception.getMessage());
 
-        log.warn("Forbidden: {}", exception.getMessage());
+            return buildResponse(
+                    HttpStatus.FORBIDDEN,
+                    "FORBIDDEN",
+                    exception.getMessage(),
+                    request
+            );
+        }
 
-        return buildResponse(
-                HttpStatus.FORBIDDEN,
-                "FORBIDDEN",
-                exception.getMessage(),
-                request
-        );
-    }
-
-
+    /**
+     * Handles internal server exceptions.
+     *
+     * @param exception the thrown exception
+     * @param request the current HTTP request
+     * @return a standardized 500 Internal Server Error response
+     */
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ApiErrorResponse> handleInternalServer(
             InternalServerException exception,
@@ -126,7 +191,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-
+    /**
+     * Handles unexpected exceptions that are not explicitly managed.
+     *
+     * @param exception the thrown exception
+     * @param request the current HTTP request
+     * @return a standardized 500 Internal Server Error response
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleUnknownException(
             Exception exception,
@@ -163,6 +234,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(status).body(response);
     }
+    /**
+     * Handles request validation failures.
+     *
+     * @param exception the validation exception
+     * @param request the current HTTP request
+     * @return a standardized validation error response
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidation(
             MethodArgumentNotValidException exception,
