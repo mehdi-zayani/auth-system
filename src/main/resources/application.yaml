@@ -1,5 +1,5 @@
 # -----------------------------------------------------
-# Application configuration
+# Application
 # -----------------------------------------------------
 
 spring:
@@ -24,21 +24,57 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
+# -----------------------------------------------------
+# Server
+# -----------------------------------------------------
+
 server:
   port: ${SERVER_PORT:8080}
+  error:
+    include-stacktrace: never
+
+# -----------------------------------------------------
+# Spring Boot Actuator
+# -----------------------------------------------------
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info,metrics
+
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: never
+      probes:
+        enabled: false
+
+  info:
+    env:
+      enabled: true
+
+# -----------------------------------------------------
+# Application information
+# -----------------------------------------------------
+
+info:
+  app:
+    name: Auth System
+    description: Production-ready authentication and authorization API built with Spring Boot and JWT
+    version: 1.0.0
+    author: Mehdi Zayani
+
+# -----------------------------------------------------
+# Logging
+# -----------------------------------------------------
 
 logging:
   level:
-    org.springframework.security: INFO
+    root: INFO
+
+# -----------------------------------------------------
+# JWT
+# -----------------------------------------------------
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}

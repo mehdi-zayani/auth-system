@@ -32,7 +32,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
-.application-local.yml
 
 ### Spring Boot ###
 spring.log
