@@ -10,17 +10,21 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres:17
+
         env:
           POSTGRES_DB: auth_system
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+
         ports:
           - 5432:5432
+
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
@@ -32,7 +36,11 @@ jobs:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
 
+      JWT_SECRET_KEY: VGhpc0lzQVNlY3VyZVNlY3JldEtleUZvckpXVFRlc3RpbmdBbmRNdXN0QmVsb25nVG9UaGUyNTZiaXJLZXk=
+      JWT_EXPIRATION: 3600000
+
     steps:
+
       - name: Checkout source
         uses: actions/checkout@v4
 
