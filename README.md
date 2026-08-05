@@ -1,8 +1,8 @@
 # Auth System
 
-[![Build](https://github.com/mehdi-zayani/auth-system/actions/workflows/ci.yaml/badge.svg)](https://github.com/mehdi-zayani/auth-system/actions/workflows/ci.yaml)
+[![Build](https://github.com/mehdi-zayani/auth-system/actions/workflows/ci.yml/badge.svg)](https://github.com/mehdi-zayani/auth-system/actions/workflows/ci.yaml)
 ![Java](https://img.shields.io/badge/Java-21-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.7-6DB33F)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1-6BA539)
