@@ -29,7 +29,7 @@ spring:
 # -----------------------------------------------------
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:8080}
   error:
     include-stacktrace: never
 
@@ -61,7 +61,7 @@ info:
   app:
     name: Auth System
     description: Production-ready authentication and authorization API built with Spring Boot and JWT
-    version: 1.0.0
+    version: 1.0.1
     author: Mehdi Zayani
 
 # -----------------------------------------------------
