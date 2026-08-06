@@ -8,7 +8,7 @@
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1-6BA539)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Production-ready authentication and authorization API built with Spring Boot 3, Spring Security and JWT.
+Production-ready authentication and authorization API built with Spring Boot 4, Spring Security and JWT.
 
 The project demonstrates how to implement a modern stateless authentication system following enterprise development practices. It includes user registration, JWT-based authentication, role-based authorization, request validation, centralized exception handling, database migrations with Flyway, OpenAPI documentation, automated testing, Docker support and a continuous integration pipeline.
 
@@ -38,9 +38,9 @@ The primary goal of this project is to serve as a clean, maintainable and produc
 ## Technology Stack
 
 | Category           | Technology                         |
-| ------------------ | ---------------------------------- |
+| ------------------ |------------------------------------|
 | Language           | Java 21                            |
-| Framework          | Spring Boot 3                      |
+| Framework          | Spring Boot 4                      |
 | Security           | Spring Security, JWT               |
 | Database           | PostgreSQL 17                      |
 | ORM                | Spring Data JPA, Hibernate         |

@@ -61,7 +61,7 @@ info:
   app:
     name: Auth System
     description: Production-ready authentication and authorization API built with Spring Boot and JWT
-    version: 1.0.1
+    version: 1.0.2
     author: Mehdi Zayani
 
 # -----------------------------------------------------
