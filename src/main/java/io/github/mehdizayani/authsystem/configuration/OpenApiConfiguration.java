@@ -41,7 +41,7 @@ public class OpenApiConfiguration {
                                         Production-ready authentication and authorization API
                                         built with Spring Boot, Spring Security and JWT.
                                         """)
-                                .version("1.0.0")
+                                .version("1.0.3")
                                 .contact(
                                         new Contact()
                                                 .name("Mehdi Zayani")

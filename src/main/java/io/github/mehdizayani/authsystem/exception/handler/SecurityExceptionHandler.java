@@ -3,6 +3,8 @@ package io.github.mehdizayani.authsystem.exception.handler;
 import io.github.mehdizayani.authsystem.exception.response.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,8 +22,9 @@ import java.util.UUID;
  * This handler is responsible for authentication and authorization
  * failures raised by Spring Security.
  */
-@Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
+@Slf4j
 public class SecurityExceptionHandler {
 
     /**
