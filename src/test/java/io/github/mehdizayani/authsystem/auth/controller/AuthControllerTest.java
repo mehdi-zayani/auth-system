@@ -92,8 +92,8 @@ class AuthControllerTest {
     }
 
     /**
-     * Verifies that an invalid registration request
-     * returns HTTP 400 (Bad Request).
+     * Verifies that a valid login request returns
+     * HTTP 200 (OK) and a JWT authentication response.
      */
     @Test
     void shouldLoginSuccessfully() throws Exception {
@@ -127,7 +127,10 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.tokenType").value("Bearer"));
     }
 
-
+    /**
+     * Verifies that an invalid registration request
+     * returns HTTP 400 (Bad Request).
+     */
     @Test
     void shouldRejectInvalidRegisterRequest() throws Exception {
 
