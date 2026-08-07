@@ -15,6 +15,26 @@ The project demonstrates how to implement a modern stateless authentication syst
 The primary goal of this project is to serve as a clean, maintainable and production-oriented reference implementation for Spring Boot security.
 
 ---
+## Live Demo
+
+A deployed version of the application is available on Railway.
+
+Production API:
+
+```text
+https://auth-system-production-3295.up.railway.app
+```
+Swagger UI:
+```text
+https://auth-system-production-3295.up.railway.app/swagger-ui/index.html
+```
+
+Actuator Health Check:
+```text
+https://auth-system-production-3295.up.railway.app/actuator/health
+```
+---
+
 ## Features
 
 * Stateless authentication using JSON Web Tokens (JWT)
@@ -57,28 +77,6 @@ The primary goal of this project is to serve as a clean, maintainable and produc
 
 The application follows a layered architecture based on Spring Boot best practices.
 
-```text
-                HTTP Request
-                     │
-                     ▼
-             Authentication Filter
-                     │
-                     ▼
-               Spring Security
-                     │
-                     ▼
-                REST Controller
-                     │
-                     ▼
-                   Service
-                     │
-                     ▼
-                Repository (JPA)
-                     │
-                     ▼
-                 PostgreSQL
-```
-
 Authentication is handled using JSON Web Tokens (JWT). After a successful login, clients receive a signed access token that must be included in the `Authorization` header using the `Bearer` scheme for all protected endpoints.
 
 Database schema management is performed with Flyway, ensuring versioned and repeatable database migrations across environments.
@@ -89,26 +87,66 @@ All unhandled exceptions are processed by centralized exception handlers, provid
 ## Project Structure
 
 ```text
-src
-├── main
-│   ├── java
-│   │   └── io.github.mehdizayani.authsystem
-│   │       ├── auth
-│   │       ├── common
-│   │       ├── configuration
-│   │       ├── exception
-│   │       ├── role
-│   │       ├── security
-│   │       ├── user
-│   │       └── AuthSystemApplication.java
-│   └── resources
-│       ├── db
-│       │   └── migration
-│       └── application.yaml
-└── test
-    └── java
-```
+## Project Structure
 
+```text
+auth-system
+├── .github
+│   └── workflows
+│       └── ci.yml
+├── docs
+│   └── images
+│       └── swagger-ui.png
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── io.github.mehdizayani.authsystem
+│   │   │       ├── auth
+│   │   │       │   ├── controller
+│   │   │       │   ├── dto
+│   │   │       │   │   ├── request
+│   │   │       │   │   └── response
+│   │   │       │   └── service
+│   │   │       │       └── impl
+│   │   │       ├── common
+│   │   │       ├── configuration
+│   │   │       ├── exception
+│   │   │       │   ├── handler
+│   │   │       │   └── response
+│   │   │       ├── role
+│   │   │       │   ├── entity
+│   │   │       │   └── repository
+│   │   │       ├── security
+│   │   │       │   └── jwt
+│   │   │       ├── user
+│   │   │       │   ├── controller
+│   │   │       │   ├── dto
+│   │   │       │   ├── entity
+│   │   │       │   └── repository
+│   │   │       └── AuthSystemApplication.java
+│   │   └── resources
+│   │       ├── application.yaml
+│   │       └── db
+│   │           └── migration
+│   │               ├── V1__create_auth_tables.sql
+│   │               └── V2__insert_default_roles.sql
+│   └── test
+│       └── java
+│           └── io.github.mehdizayani.authsystem
+│               ├── auth
+│               │   ├── controller
+│               │   └── service
+│               ├── security
+│               │   └── jwt
+│               └── AuthSystemApplicationTests.java
+├── docker-compose.yml
+├── Dockerfile
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+└── LICENSE
+```
 | Package         | Responsibility                                                     |
 | --------------- | ------------------------------------------------------------------ |
 | `auth`          | Authentication endpoints, requests, responses and business logic   |
@@ -154,16 +192,28 @@ If all tests pass successfully, the project is ready to be configured and execut
 
 ---
 ## Configuration
-
 The application uses environment variables for runtime configuration.
 
-Create a local environment file from the provided template:
+A template file is provided as `.env.example` to document the required configuration values.
+
+For local development, environment variables can be configured through:
+
+* IDE run configuration
+* Shell environment variables
+* Docker Compose configuration
+
+For production environments (such as Railway), variables must be configured directly through the platform environment settings.
+
+
+Example:
 
 ```bash
-cp .env.example .env
+export JWT_SECRET_KEY=<your-base64-secret>
+export JWT_EXPIRATION=3600000
 ```
 
-Update the values according to your local environment before starting the application.
+Or configure them through your IDE, Docker Compose, or deployment platform environment variables.
+
 
 | Variable            | Description                                   | Default                                        |
 | ------------------- | --------------------------------------------- | ---------------------------------------------- |
@@ -177,11 +227,11 @@ Update the values according to your local environment before starting the applic
 | `JWT_EXPIRATION`    | JWT expiration time in milliseconds           | `3600000`                                      |
 | `SERVER_PORT`       | Application HTTP port                         | `8080`                                         |
 
-The application reads these values through Spring Boot's externalized configuration mechanism, allowing different environments (development, testing and production) to use different settings without modifying the source code.
-
-**Important**
+### Important
 
 The `JWT_SECRET_KEY` must be a sufficiently long Base64-encoded secret. Never commit production secrets to the repository.
+
+The `.env.example` file is only a configuration reference and does not load values automatically. Make sure the required environment variables are available before starting the application.
 
 ---
 ## Running the Application
@@ -233,11 +283,21 @@ The project provides interactive API documentation through Swagger UI and operat
 
 ### Swagger UI
 
-Once the application is running, the OpenAPI documentation is available at:
 
-```text id="j9te58"
+The application provides interactive API documentation through Swagger UI.
+
+Local environment:
+
+```text 
 http://localhost:8080/swagger-ui/index.html
 ```
+Production environment:
+```text 
+https://auth-system-production-3295.up.railway.app/swagger-ui/index.html
+```
+Production Swagger preview:
+
+![Swagger UI](docs/images/swagger-ui.png)
 
 Swagger UI allows you to:
 
@@ -253,23 +313,53 @@ To access protected endpoints:
 3. Click **Authorize** in Swagger UI.
 4. Enter the token using the following format:
 
-```text id="kl5x20"
+```text 
 Bearer <your-jwt-token>
 ```
 
 ### Spring Boot Actuator
 
-The application exposes the following public operational endpoints:
+The application exposes operational endpoints through Spring Boot Actuator for monitoring and health checks.
+
+### Local Environment
+
+The actuator endpoints are available at:
+
+```text 
+http://localhost:8080/actuator
+```
+#### Available public endpoints:
 
 | Endpoint           | Description                            |
 | ------------------ | -------------------------------------- |
 | `/actuator/health` | Returns the application health status  |
 | `/actuator/info`   | Returns public application information |
 
+### Production Environment (Railway)
+The deployed application exposes the same endpoints:
+
+```text 
+https://auth-system-production-3295.up.railway.app/actuator
+```
+
+#### Examples:
+Health check:
+```text 
+https://auth-system-production-3295.up.railway.app/actuator/health
+```
+Application information
+```text 
+https://auth-system-production-3295.up.railway.app/actuator/info
+```
+These endpoints can be used to verify that the application is running correctly after deployment.
+
 ---
 ## Authentication Flow
 
 The application uses stateless authentication based on JSON Web Tokens (JWT).
+
+
+The authentication process follows these steps:
 
 ### 1. Register a New User
 
@@ -278,7 +368,16 @@ Create a new account using the registration endpoint.
 ```http
 POST /api/v1/auth/register
 ```
-
+#### Example request:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "username": "johndoe",
+  "email": "john.doe@test.com",
+  "password": "Password123!"
+}
+```
 ### 2. Authenticate
 
 Authenticate with the registered credentials.
@@ -286,12 +385,22 @@ Authenticate with the registered credentials.
 ```http
 POST /api/v1/auth/login
 ```
-
+#### Example request:
+```json
+{
+  "email": "john.doe@test.com",
+  "password": "Password123!"
+}
+```
 If the credentials are valid, the API returns:
 
-* JWT access token
-* Token type (`Bearer`)
-* Token expiration time
+```json
+{
+  "accessToken": "<jwt-token>",
+  "tokenType": "Bearer",
+  "expiresIn": 3600
+}
+```
 
 ### 3. Access Protected Resources
 
@@ -301,12 +410,28 @@ Include the JWT in the `Authorization` header for every protected request.
 Authorization: Bearer <your-jwt-token>
 ```
 
-Example:
+Protected Resource Example:
 
 ```http
 GET /api/v1/users/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 ```
+Authenticated user profile response 
+```json
+{
+  "id": 1,
+  "firstName": "Railway",
+  "lastName": "Test",
+  "username": "railwayuser",
+  "email": "railway@test.com",
+  "enabled": true,
+  "emailVerified": false,
+  "roles": [
+    "ROLE_USER"
+  ]
+}
+```
+The API validates the token before allowing access to protected resources.
 
 ### 4. Role-Based Authorization
 
@@ -325,28 +450,42 @@ Requests made without a valid token receive **401 Unauthorized** responses, whil
 
 The project includes both unit and integration tests to ensure application reliability and maintainability.
 
-### Run All Tests
-
+### Run Tests
+Execute the complete test suite:
 ```bash
 ./mvnw test
 ```
-
-### Run the Full Verification
-
+For a full Maven verification including compilation and tests
 ```bash
 ./mvnw clean verify
 ```
-
 ### Test Coverage
 
-The current test suite covers:
+The current test suite covers the main authentication and security components:
 
-* Authentication service
-* JWT generation and validation
-* Security configuration
-* Authentication controller
+* Authentication service business logic
+* User registration flow
+* Authentication controller endpoints using MockMvc
+* JWT token generation and validation
+* Spring Security filter chain and authorization rules
+* Request validation behavior
 * Application context loading
 
+Test structure:
+```bash
+src/test/java
+└── io.github.mehdizayani.authsystem
+    ├── auth
+    │   ├── controller
+    │   │   └── AuthControllerTest.java
+    │   └── service
+    │       └── AuthServiceImplTest.java
+    ├── security
+    │   ├── jwt
+    │   │   └── JwtServiceTest.java
+    │   └── SecurityConfigurationTest.java
+    └── AuthSystemApplicationTests.java
+```
 All tests are executed automatically by the GitHub Actions CI pipeline on every push and pull request.
 
 ---
@@ -393,7 +532,7 @@ This ensures that every change is validated before being merged and helps preven
 * Rate limiting
 * Audit logging
 * Authentication events
-* Improved monitoring and observability
+* Advanced monitoring and observability (Prometheus, Grafana, OpenTelemetry)
 
 ---
 ## Contributing
